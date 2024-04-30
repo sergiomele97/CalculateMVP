@@ -9,10 +9,13 @@ namespace CalculateMVP
 {
     internal class Program
     {
+        public static DatosJugadores datosJugadores = new DatosJugadores();  // Instancia para guardar datos de los jugadores
+
         static void Main(string[] args)
         {
             string directorio; 
             string[] archivos = {};
+            
 
             while (IsDirectoryOK(directorio = SolicitarDirectorio(), ref archivos) != true)   // Bucle hasta obtener un directorio adecuado
             {
@@ -56,22 +59,29 @@ namespace CalculateMVP
         }
 
 
-        internal static bool ProcesarPartido(string archivo)
+        internal static bool IsGameProcessingOK(string archivo)
         {
-            string[] partido = File.ReadAllLines(archivo);
-            string deporte = partido[0];
+            string[] partido = File.ReadAllLines(archivo);      // Guardamos archivo en un String[]
+            string deporte = partido[0];                        // Consultamos primera linea para saber el deporte
+            Console.WriteLine(deporte); // debug
 
             switch (deporte)
             {
                 case "BASKETBALL":
-                    BasketGame basketGame = new BasketGame(partido);
+                    BasketGame basketGame = new BasketGame(partido);    // Crea instancia partido
+                    basketGame.AddNewPlayers(ref datosJugadores);       // Añade Jugadores nuevos
+                                                                        // Calcula puntuaciones y las añade
                     break;
 
                 case "HANDBALL":
+                    HandballGame handballGame = new HandballGame(partido);
+                    handballGame.AddNewPlayers(ref datosJugadores);
                     break;
 
                 default:
-                    break;
+                    Console.WriteLine("Detectado archivo con formato invalido: " + archivo + 
+                                      "\nNo se puede calcular el MVP si un archivo esta comprometido");
+                    return false;
             }
 
             return true;
@@ -83,7 +93,7 @@ namespace CalculateMVP
 
             foreach (string archivo in archivos)     
             {
-                ProcesarPartido(archivo);
+                IsGameProcessingOK(archivo);
             }
             return "";
         }
