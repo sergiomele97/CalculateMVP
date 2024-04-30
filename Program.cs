@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CalculateMVP
 {
@@ -61,29 +63,32 @@ namespace CalculateMVP
 
         internal static bool IsGameProcessingOK(string archivo)
         {
-            string[] partido = File.ReadAllLines(archivo);      // Guardamos archivo en un String[]
-            string deporte = partido[0];                        // Consultamos primera linea para saber el deporte
-            Console.WriteLine(deporte); // debug
-
-            switch (deporte)
+            try
             {
-                case "BASKETBALL":
-                    BasketGame basketGame = new BasketGame(partido);    // Crea instancia partido
-                    basketGame.AddNewPlayers(ref datosJugadores);       // Añade Jugadores nuevos
-                    basketGame.addScoredPoints(ref datosJugadores);     // Calcula puntuaciones y las añade
-                    break;
+                string[] partido = File.ReadAllLines(archivo);      // Guardamos archivo en un String[]
+                string deporte = partido[0];                        // Consultamos primera linea para saber el deporte
 
-                case "HANDBALL":
-                    HandballGame handballGame = new HandballGame(partido);
-                    handballGame.AddNewPlayers(ref datosJugadores);
-                    handballGame.addScoredPoints(ref datosJugadores);
-                    break;
+                switch (deporte)
+                {
+                    case "BASKETBALL":
+                        BasketGame basketGame = new BasketGame(partido);    // Crea instancia partido
+                        basketGame.AddNewPlayers(ref datosJugadores);       // Añade Jugadores nuevos
+                        basketGame.addScoredPoints(ref datosJugadores);     // Calcula puntuaciones y las añade
+                        break;
 
-                default:
-                    Console.WriteLine("Detectado archivo con formato invalido: " + archivo + 
-                                      "\nNo se puede calcular el MVP si un archivo esta comprometido");
-                    return false;
+                    case "HANDBALL":
+                        HandballGame handballGame = new HandballGame(partido);
+                        handballGame.AddNewPlayers(ref datosJugadores);
+                        handballGame.addScoredPoints(ref datosJugadores);
+                        break;
+
+                    default:
+                        Console.WriteLine("Detectado archivo con formato invalido: " + archivo +
+                                          "\nNo se puede calcular el MVP si un archivo esta comprometido");
+                        return false;
+                } 
             }
+            catch (Exception e) { Console.WriteLine(e.Message); return false; }
 
             return true;
         }
@@ -91,22 +96,29 @@ namespace CalculateMVP
 
         internal static string FindMVP(string directorio, string[] archivos)
         {
-            // Game processing
+            // Game data processing
             foreach (string archivo in archivos)     
             {
-                IsGameProcessingOK(archivo);
+                if (IsGameProcessingOK(archivo) != true) 
+                {
+                    Console.WriteLine("Detectado archivo con formato invalido: " + archivo +
+                                              "\nNo se puede calcular el MVP si un archivo esta comprometido.\n" +
+                                              "El programa se cerrará.");
+                    Console.ReadKey();
+                    System.Environment.Exit(0);     // Finaliza el programa
+                };
             }
 
+            // Finding the MVP
             int indexMVP = 0;
-
             for (int i = 0; i < datosJugadores.nicks.Count(); i++)
             {
+                Console.WriteLine("El jugador es: " + datosJugadores.nicks[i] + ", con una puntuacion de " + datosJugadores.ratingPoints[i] + ".");
                 if (datosJugadores.ratingPoints[i] > datosJugadores.ratingPoints[indexMVP])
                 {
                     indexMVP = i;
                 }
             }
-
 
             return "El jugador MVP es: " + datosJugadores.nicks[indexMVP] + ", con una puntuacion de " + datosJugadores.ratingPoints[indexMVP] + ".";
         }
