@@ -11,29 +11,41 @@ namespace CalculateMVP
     {
         static void Main(string[] args)
         {
-            string directorio;
+            string directorio; 
+            string[] archivos = {};
 
-            while (IsDirectoryOK(directorio = SolicitarDirectorio()) != true)   // Bucle hasta obtener un directorio adecuado
+            while (IsDirectoryOK(directorio = SolicitarDirectorio(), ref archivos) != true)   // Bucle hasta obtener un directorio adecuado
             {
-                Console.Clear();
                 Console.WriteLine("El directorio introducido no cumple con las condiciones");   
             }
 
-            Console.WriteLine(CalcularMVP(directorio));         // Mostramos por pantalla los resultados de calcular el MVP para ese directorio
+            Console.WriteLine(CalcularMVP(directorio, archivos));         // Mostramos por pantalla los resultados de calcular el MVP para ese directorio
         
         }
 
-        internal static bool IsDirectoryOK(string directorio)
+
+        internal static bool IsDirectoryOK(string directorio, ref string[] archivos)
         {
-            string[] archivos = Directory.GetFiles(directorio, "*.txt");    // Obtiene array de Strings con las rutas absolutas de los archivos
+            Console.Clear();
 
-            foreach (string archivo in archivos)     // Debug
+            try
             {
-                Console.WriteLine(archivo);
-            }
+                archivos = Directory.GetFiles(directorio, "*.txt");    // Obtiene array de Strings con las rutas absolutas de los archivos
 
-            return false;
+                if (archivos.Length == 0) { Console.WriteLine("El directorio no contiene archivos con el formato esperado"); return false; }
+                else
+                {
+                    Console.WriteLine("Partidos encontrados:");
+                    foreach (string archivo in archivos)     // Debug
+                    {
+                        Console.WriteLine(archivo);
+                    }
+                }
+            } catch (Exception e) { Console.WriteLine(e.Message); return false; }
+            
+            return true;
         }
+
 
         internal static string SolicitarDirectorio()
         {
@@ -43,18 +55,35 @@ namespace CalculateMVP
             return directorio;
         }
 
-        internal static bool IsFileOK(string archivo)
+
+        internal static bool ProcesarPartido(string archivo)
         {
+            string[] partido = File.ReadAllLines(archivo);
+            string deporte = partido[0];
+
+            switch (deporte)
+            {
+                case "BASKETBALL":
+                    BasketGame basketGame = new BasketGame(partido);
+                    break;
+
+                case "HANDBALL":
+                    break;
+
+                default:
+                    break;
+            }
+
             return true;
         }
 
-        internal static string CalcularMVP(string directorio)
+
+        internal static string CalcularMVP(string directorio, string[] archivos)
         {
-            string[] archivos = Directory.GetFiles(directorio, "*.txt");    
 
             foreach (string archivo in archivos)     
             {
-                IsFileOK(archivo);
+                ProcesarPartido(archivo);
             }
             return "";
         }

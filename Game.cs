@@ -8,10 +8,10 @@ namespace CalculateMVP
 {
     internal class Game
     {
-        string[] players;
-        string[] nicknames;
-        int[] numbers;
-        string[] teamNames;
-        char[] positions;
+        public string[] players;
+        public string[] nicknames;
+        public int[] numbers;
+        public string[] teamNames;
+        public char[] positions;
     }
 }
