@@ -22,7 +22,7 @@ namespace CalculateMVP
                 if (datosJugadores.nicks.Contains(nicknames[i]) != true)
                 {
                     datosJugadores.nicks.Add(nicknames[i]);
-                    datosJugadores.scoredPoints.Add(0);
+                    datosJugadores.ratingPoints.Add(0);
                 }
             }
         }

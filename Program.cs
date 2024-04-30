@@ -22,7 +22,7 @@ namespace CalculateMVP
                 Console.WriteLine("El directorio introducido no cumple con las condiciones");   
             }
 
-            Console.WriteLine(CalcularMVP(directorio, archivos));         // Mostramos por pantalla los resultados de calcular el MVP para ese directorio
+            Console.WriteLine(FindMVP(directorio, archivos));         // Mostramos por pantalla los resultados de calcular el MVP para ese directorio
         
         }
 
@@ -70,12 +70,13 @@ namespace CalculateMVP
                 case "BASKETBALL":
                     BasketGame basketGame = new BasketGame(partido);    // Crea instancia partido
                     basketGame.AddNewPlayers(ref datosJugadores);       // Añade Jugadores nuevos
-                                                                        // Calcula puntuaciones y las añade
+                    basketGame.addScoredPoints(ref datosJugadores);     // Calcula puntuaciones y las añade
                     break;
 
                 case "HANDBALL":
                     HandballGame handballGame = new HandballGame(partido);
                     handballGame.AddNewPlayers(ref datosJugadores);
+                    handballGame.addScoredPoints(ref datosJugadores);
                     break;
 
                 default:
@@ -88,14 +89,26 @@ namespace CalculateMVP
         }
 
 
-        internal static string CalcularMVP(string directorio, string[] archivos)
+        internal static string FindMVP(string directorio, string[] archivos)
         {
-
+            // Game processing
             foreach (string archivo in archivos)     
             {
                 IsGameProcessingOK(archivo);
             }
-            return "";
+
+            int indexMVP = 0;
+
+            for (int i = 0; i < datosJugadores.nicks.Count(); i++)
+            {
+                if (datosJugadores.ratingPoints[i] > datosJugadores.ratingPoints[indexMVP])
+                {
+                    indexMVP = i;
+                }
+            }
+
+
+            return "El jugador MVP es: " + datosJugadores.nicks[indexMVP] + ", con una puntuacion de " + datosJugadores.ratingPoints[indexMVP] + ".";
         }
     }
 }

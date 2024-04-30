@@ -17,15 +17,32 @@ namespace CalculateMVP
         {
             for (int i = 1; i < nicknames.Length; i++)
             {
-
+                int index = datosJugadores.nicks.IndexOf(nicknames[i]);
+                datosJugadores.ratingPoints[index] += calculateScoredPoints(i);
             }
         }
 
         public int calculateScoredPoints(int i)
         {
-            int scoredPoints = 0;
+            int ratingPoints = 0;
 
-            return scoredPoints;
+            switch (positions[i]){
+
+                case 'G':   // Guard
+                    ratingPoints = 2 * scoredPoints[i] + 3 * rebounds[i] + 1 * assists[i];
+                    break;
+
+                case 'F':   // Forward
+                    ratingPoints = 2 * scoredPoints[i] + 2 * rebounds[i] + 2 * assists[i];
+                    break;
+
+                case 'C':   // Center
+                    ratingPoints = 2 * scoredPoints[i] + 1 * rebounds[i] + 3 * assists[i];
+                    break;
+
+            }
+
+            return ratingPoints;
         }
 
         public BasketGame(string[] partido) 

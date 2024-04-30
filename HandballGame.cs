@@ -12,6 +12,35 @@ namespace CalculateMVP
         int[] goalsReceived;
 
 
+        public void addScoredPoints(ref DatosJugadores datosJugadores)
+        {
+            for (int i = 1; i < nicknames.Length; i++)
+            {
+                int index = datosJugadores.nicks.IndexOf(nicknames[i]);
+                datosJugadores.ratingPoints[index] += calculateScoredPoints(i);
+            }
+        }
+
+        public int calculateScoredPoints(int i)
+        {
+            int ratingPoints = 0;
+
+            switch (positions[i])
+            {
+
+                case 'G':   // Goalkeeper
+                    ratingPoints = 50 + 5 * goalsMade[i] - 2 * goalsReceived[i];
+                    break;
+
+                case 'F':   // Field Player
+                    ratingPoints = 20 + 1 * goalsMade[i] - 1 * goalsReceived[i];
+                    break;
+
+            }
+
+            return ratingPoints;
+        }
+
         public HandballGame(string[] partido)
         {
             players = new string[partido.Length];   // Inicializamos los arrays con el tamaño del archivo
