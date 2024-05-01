@@ -13,12 +13,12 @@ namespace CalculateMVP
         int[] assists;
 
 
-        public void addScoredPoints(ref DatosJugadores datosJugadores)
+        public void addScoredPoints(ref Puntuaciones puntuaciones)
         {
             for (int i = 1; i < nicknames.Length; i++)
             {
-                int index = datosJugadores.nicks.IndexOf(nicknames[i]);
-                datosJugadores.ratingPoints[index] += calculateScoredPoints(i);
+                int index = puntuaciones.nicks.IndexOf(nicknames[i]);
+                puntuaciones.ratingPoints[index] += calculateScoredPoints(i);
             }
         }
 
@@ -47,7 +47,7 @@ namespace CalculateMVP
 
         public BasketGame(string[] partido) 
         {
-            players = new string[partido.Length];       // Establecemos tamaño de los arrays
+            players = new string[partido.Length];               // Establecemos tamaño de los arrays
             nicknames = new string[partido.Length];
             numbers = new int[partido.Length];
             teamNames = new string[partido.Length];
@@ -56,11 +56,11 @@ namespace CalculateMVP
             rebounds = new int[partido.Length];
             assists = new int[partido.Length];
 
-            for (int i = 1; i < partido.Length; i++)    // Iteramos sobre cada linea del archivo
+            for (int i = 1; i < partido.Length; i++)            // Iteramos sobre cada linea del archivo
             {
                 string[] contenido = partido[i].Split(';');
 
-                players[i] = contenido[0];              // El primer valor [0] de cada array queda sin inicializar
+                players[i] = contenido[0];                      // El primer valor [0] de cada array queda sin inicializar
                 nicknames[i] = contenido[1]; 
                 numbers[i] = Convert.ToInt32(contenido[2]); 
                 teamNames[i] = contenido[3]; 

@@ -15,14 +15,15 @@ namespace CalculateMVP
         public string[] teamNames;
         public char[] positions;
 
-        public void AddNewPlayers(ref DatosJugadores datosJugadores)
+
+        public void AddNewPlayers(ref Puntuaciones puntuaciones)
         {
             for (int i = 1; i < nicknames.Length; i++)
             {
-                if (datosJugadores.nicks.Contains(nicknames[i]) != true)
+                if (puntuaciones.nicks.Contains(nicknames[i]) != true)
                 {
-                    datosJugadores.nicks.Add(nicknames[i]);
-                    datosJugadores.ratingPoints.Add(0);
+                    puntuaciones.nicks.Add(nicknames[i]);
+                    puntuaciones.ratingPoints.Add(0);
                 }
             }
         }

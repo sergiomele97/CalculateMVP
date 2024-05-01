@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasketGame.cs" />
-    <Compile Include="DatosJugadores.cs" />
+    <Compile Include="Puntuaciones.cs" />
     <Compile Include="HandballGame.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />

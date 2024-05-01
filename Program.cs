@@ -11,21 +11,39 @@ namespace CalculateMVP
 {
     internal class Program
     {
-        public static DatosJugadores datosJugadores = new DatosJugadores();  // Instancia para guardar datos de los jugadores
+        public static Puntuaciones puntuaciones = new Puntuaciones();  // Creamos una instancia para guardar las puntuaciones
 
         static void Main(string[] args)
         {
             string directorio; 
-            string[] archivos = {};
+            string[] archivos = {}; 
             
 
-            while (IsDirectoryOK(directorio = SolicitarDirectorio(), ref archivos) != true)   // Bucle hasta obtener un directorio adecuado
+            while (IsDirectoryOK(directorio = SolicitarDirectorio(), ref archivos) != true)   // 1. Bucle hasta obtener un directorio adecuado
             {
                 Console.WriteLine("El directorio introducido no cumple con las condiciones");   
             }
 
-            Console.WriteLine(FindMVP(directorio, archivos));         // Mostramos por pantalla los resultados de calcular el MVP para ese directorio
+            GameDataProcessing(archivos);       // 2. Procesa los archivos y almacena la información en la instancia puntuaciones (Nicks + ratingPoints)                        
+
+            Console.WriteLine(FindMVP(directorio, archivos));         // 3. Mostramos por pantalla los resultados de calcular el MVP para ese directorio
         
+        }   // FIN DEL PROGRAMA
+
+
+
+        //-----ESPACIO-PARA-METODOS-------------------------------------------------------------------------------------------------------------------
+
+        /*
+         *  1. OBTENCION DEL DIRECTORIO
+         */
+
+        internal static string SolicitarDirectorio()
+        {
+            Console.WriteLine("Introduzca la ruta absoluta al directorio con los archivos de partidos:");
+            string directorio = Console.ReadLine();
+
+            return directorio;
         }
 
 
@@ -41,10 +59,12 @@ namespace CalculateMVP
                 else
                 {
                     Console.WriteLine("Partidos encontrados:");
-                    foreach (string archivo in archivos)     // Debug
+
+                    foreach (string archivo in archivos)     
                     {
                         Console.WriteLine(archivo);
                     }
+                    
                 }
             } catch (Exception e) { Console.WriteLine(e.Message); return false; }
             
@@ -52,12 +72,24 @@ namespace CalculateMVP
         }
 
 
-        internal static string SolicitarDirectorio()
-        {
-            Console.WriteLine("Introduzca la ruta absoluta al directorio con los archivos de partidos:");
-            string directorio = Console.ReadLine();
+        /*
+         * 2. PROCESAMIENTO DE ARCHIVOS EN EL DIRECTORIO ACEPTADO
+         */
 
-            return directorio;
+        private static void GameDataProcessing(string[] archivos)
+        {
+            
+            foreach (string archivo in archivos)
+            {
+                if (IsGameProcessingOK(archivo) != true)
+                {
+                    Console.WriteLine("Detectado archivo con formato invalido: " + archivo +
+                                              "\nNo se puede calcular el MVP si un archivo esta comprometido.\n" +
+                                              "El programa se cerrará.");
+                    Console.ReadKey();
+                    System.Environment.Exit(0);     // Si un archivo es NOK --> Finaliza el programa
+                };
+            }
         }
 
 
@@ -71,15 +103,15 @@ namespace CalculateMVP
                 switch (deporte)
                 {
                     case "BASKETBALL":
-                        BasketGame basketGame = new BasketGame(partido);    // Crea instancia partido
-                        basketGame.AddNewPlayers(ref datosJugadores);       // Añade Jugadores nuevos
-                        basketGame.addScoredPoints(ref datosJugadores);     // Calcula puntuaciones y las añade
+                        BasketGame basketGame = new BasketGame(partido);        // Crea instancia partido
+                        basketGame.AddNewPlayers(ref puntuaciones);             // Añade Jugadores nuevos
+                        basketGame.addScoredPoints(ref puntuaciones);           // Calcula puntuaciones y las añade
                         break;
 
                     case "HANDBALL":
                         HandballGame handballGame = new HandballGame(partido);
-                        handballGame.AddNewPlayers(ref datosJugadores);
-                        handballGame.addScoredPoints(ref datosJugadores);
+                        handballGame.AddNewPlayers(ref puntuaciones);
+                        handballGame.addScoredPoints(ref puntuaciones);
                         break;
 
                     default:
@@ -94,33 +126,24 @@ namespace CalculateMVP
         }
 
 
+        /*
+         * 3. BUSQUEDA DEL JUGADOR CON EL VALOR MAXIMO DE RATING POINTS 
+         */
+
         internal static string FindMVP(string directorio, string[] archivos)
         {
-            // Game data processing
-            foreach (string archivo in archivos)     
-            {
-                if (IsGameProcessingOK(archivo) != true) 
-                {
-                    Console.WriteLine("Detectado archivo con formato invalido: " + archivo +
-                                              "\nNo se puede calcular el MVP si un archivo esta comprometido.\n" +
-                                              "El programa se cerrará.");
-                    Console.ReadKey();
-                    System.Environment.Exit(0);     // Finaliza el programa
-                };
-            }
 
-            // Finding the MVP
             int indexMVP = 0;
-            for (int i = 0; i < datosJugadores.nicks.Count(); i++)
+            for (int i = 0; i < puntuaciones.nicks.Count(); i++)
             {
-                Console.WriteLine("El jugador es: " + datosJugadores.nicks[i] + ", con una puntuacion de " + datosJugadores.ratingPoints[i] + ".");
-                if (datosJugadores.ratingPoints[i] > datosJugadores.ratingPoints[indexMVP])
+                // DEBUG: Console.WriteLine("El jugador es: " + puntuaciones.nicks[i] + ", con una puntuacion de " + puntuaciones.ratingPoints[i] + "."); 
+                if (puntuaciones.ratingPoints[i] > puntuaciones.ratingPoints[indexMVP])
                 {
                     indexMVP = i;
                 }
             }
 
-            return "El jugador MVP es: " + datosJugadores.nicks[indexMVP] + ", con una puntuacion de " + datosJugadores.ratingPoints[indexMVP] + ".";
+            return "\nEl jugador MVP es: " + puntuaciones.nicks[indexMVP] + ", con una puntuacion de " + puntuaciones.ratingPoints[indexMVP] + ".\n";
         }
     }
 }

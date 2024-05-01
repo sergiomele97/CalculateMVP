@@ -12,12 +12,12 @@ namespace CalculateMVP
         int[] goalsReceived;
 
 
-        public void addScoredPoints(ref DatosJugadores datosJugadores)
+        public void addScoredPoints(ref Puntuaciones puntuaciones)
         {
             for (int i = 1; i < nicknames.Length; i++)
             {
-                int index = datosJugadores.nicks.IndexOf(nicknames[i]);
-                datosJugadores.ratingPoints[index] += calculateScoredPoints(i);
+                int index = puntuaciones.nicks.IndexOf(nicknames[i]);           // Busca el indice del nick en puntuaciones
+                puntuaciones.ratingPoints[index] += calculateScoredPoints(i);   // Modifica los rating points en ese indice
             }
         }
 
@@ -43,7 +43,7 @@ namespace CalculateMVP
 
         public HandballGame(string[] partido)
         {
-            players = new string[partido.Length];   // Inicializamos los arrays con el tamaño del archivo
+            players = new string[partido.Length];           // Inicializamos los arrays con el tamaño del archivo
             nicknames = new string[partido.Length];
             numbers = new int[partido.Length];
             teamNames = new string[partido.Length];
@@ -52,11 +52,11 @@ namespace CalculateMVP
             goalsReceived = new int[partido.Length];
 
 
-            for (int i = 1; i < partido.Length; i++)    // Iteramos sobre cada linea del archivo
+            for (int i = 1; i < partido.Length; i++)        // Iteramos sobre cada linea del archivo menos las primera (deporte)
             {
                 string[] contenido = partido[i].Split(';');
 
-                players[i] = contenido[0];              // El primer valor [0] de cada array queda sin inicializar
+                players[i] = contenido[0];                  // El primer valor [0] de cada array queda sin asignar valor
                 nicknames[i] = contenido[1];
                 numbers[i] = Convert.ToInt32(contenido[2]);
                 teamNames[i] = contenido[3];
