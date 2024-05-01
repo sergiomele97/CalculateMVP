@@ -64,16 +64,16 @@ namespace CalculateMVP
         /*
          *  3. AÑADIR PUNTUACIONES
          */
-        public void addScoredPoints(ref Puntuaciones puntuaciones)
+        public void addRatingPoints(ref Puntuaciones puntuaciones)
         {
             for (int i = 1; i < nicknames.Length; i++)
             {
                 int index = puntuaciones.nicks.IndexOf(nicknames[i]);           // Busca el indice del nick en puntuaciones
-                puntuaciones.ratingPoints[index] += calculateScoredPoints(i);   // Modifica los rating points en ese indice
+                puntuaciones.ratingPoints[index] += calculateRatingPoints(i);   // Modifica los rating points en ese indice
             }
         }
 
-        public int calculateScoredPoints(int i)
+        public int calculateRatingPoints(int i)
         {
             int ratingPoints = 0;
 

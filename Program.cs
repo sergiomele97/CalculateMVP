@@ -54,7 +54,7 @@ namespace CalculateMVP
                 if (archivos.Length == 0) { Console.WriteLine("El directorio no contiene archivos con el formato esperado"); return false; }
                 else
                 {
-                    Console.WriteLine("Partidos encontrados:");
+                    Console.WriteLine("------Partidos encontrados:\n");
 
                     foreach (string archivo in archivos)     
                     {
@@ -101,13 +101,13 @@ namespace CalculateMVP
                     case "BASKETBALL":
                         BasketGame basketGame = new BasketGame(partido);        // Crea instancia partido
                         basketGame.AddNewPlayers(ref puntuaciones);             // Añade Jugadores nuevos
-                        basketGame.addScoredPoints(ref puntuaciones);           // Calcula puntuaciones y las añade
+                        basketGame.addRatingPoints(ref puntuaciones);           // Calcula puntuaciones y las añade
                         break;
 
                     case "HANDBALL":
                         HandballGame handballGame = new HandballGame(partido);
                         handballGame.AddNewPlayers(ref puntuaciones);
-                        handballGame.addScoredPoints(ref puntuaciones);
+                        handballGame.addRatingPoints(ref puntuaciones);
                         break;
 
                     default:
@@ -128,18 +128,19 @@ namespace CalculateMVP
 
         internal static string FindMVP(string directorio, string[] archivos)
         {
+            Console.WriteLine("\n------Listado de jugadores:\n");
 
             int indexMVP = 0;
             for (int i = 0; i < puntuaciones.nicks.Count(); i++)
             {
-                Console.WriteLine("El jugador es: " + puntuaciones.nicks[i] + ", con una puntuacion de " + puntuaciones.ratingPoints[i] + "."); 
+                Console.WriteLine("Jugador con identificador: " + puntuaciones.nicks[i] + ", con una puntuacion de " + puntuaciones.ratingPoints[i] + "."); 
                 if (puntuaciones.ratingPoints[i] > puntuaciones.ratingPoints[indexMVP])
                 {
                     indexMVP = i;
                 }
             }
 
-            return "\nEl jugador MVP es: " + puntuaciones.nicks[indexMVP] + ", con una puntuacion de " + puntuaciones.ratingPoints[indexMVP] + ".\n";
+            return "\n------El jugador MVP es: " + puntuaciones.nicks[indexMVP] + ", con una puntuacion de " + puntuaciones.ratingPoints[indexMVP] + ".\n";
         }
     }
 }
