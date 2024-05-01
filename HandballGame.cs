@@ -38,8 +38,28 @@ namespace CalculateMVP
 
             }
 
+            if (teamNames[i] == winnerTeam)     // Bonus por equipo ganador
+            {
+                ratingPoints += 10;
+            }
+
             return ratingPoints;
         }
+
+
+        public string setWinnerTeam()
+        {
+            string[] equipos = teamNames.Distinct().ToArray();      // Crear array con nombres equipos unicos
+            int[] puntuacionEquipos = new int[equipos.Length];
+
+            for (int i = 1; i < teamNames.Length; i++)              // Sumamos los puntos a cada equipo correspondiente
+            {
+                puntuacionEquipos[Array.IndexOf(equipos, teamNames[i])] += goalsMade[i];
+            }
+
+            return equipos[Array.IndexOf(puntuacionEquipos, puntuacionEquipos.Max())];  // Devolvemos resultado
+        }
+
 
         public HandballGame(string[] partido)
         {
@@ -65,6 +85,8 @@ namespace CalculateMVP
                 goalsReceived[i] = Convert.ToInt32(contenido[6]);
 
             }
+
+            winnerTeam = setWinnerTeam();                   // Asignamos valor al equipo ganador
         }
     }
 }

@@ -15,6 +15,8 @@ namespace CalculateMVP
         public string[] teamNames;
         public char[] positions;
 
+        public string winnerTeam;
+
 
         public void AddNewPlayers(ref Puntuaciones puntuaciones)
         {
