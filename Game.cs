@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace CalculateMVP
 {
@@ -18,7 +13,7 @@ namespace CalculateMVP
         public string winnerTeam;
 
 
-        public void AddNewPlayers(ref Puntuaciones puntuaciones)
+        public void AddNewPlayers(ref Puntuaciones puntuaciones)    // Metodo comun para todas las clases hijas
         {
             for (int i = 1; i < nicknames.Length; i++)
             {

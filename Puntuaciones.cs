@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 
 namespace CalculateMVP
 {
@@ -10,6 +7,5 @@ namespace CalculateMVP
     {
         public List<string> nicks = new List<string>();
         public List<int> ratingPoints = new List<int>();
-
     }
 }

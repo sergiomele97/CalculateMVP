@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CalculateMVP
 {
@@ -13,6 +11,60 @@ namespace CalculateMVP
         int[] assists;
 
 
+        //-----ESPACIO-PARA-METODOS-------------------------------------------------------------------------------------------------------------------
+
+        /*
+         *  1. CONSTRUCTOR
+         */
+        public BasketGame(string[] partido)
+        {
+            players = new string[partido.Length];                   // 1. Inicializa los arrays con el tamaño del archivo
+            nicknames = new string[partido.Length];
+            numbers = new int[partido.Length];
+            teamNames = new string[partido.Length];
+            positions = new char[partido.Length];
+            scoredPoints = new int[partido.Length];
+            rebounds = new int[partido.Length];
+            assists = new int[partido.Length];
+
+            for (int i = 1; i < partido.Length; i++)                // 2. Rellenamos los arrays con los valores ([0] = null)
+            {
+                string[] contenido = partido[i].Split(';');
+
+                players[i] = contenido[0];                      
+                nicknames[i] = contenido[1];
+                numbers[i] = Convert.ToInt32(contenido[2]);
+                teamNames[i] = contenido[3];
+                positions[i] = Convert.ToChar(contenido[4]);
+                scoredPoints[i] = Convert.ToInt32(contenido[5]);
+                rebounds[i] = Convert.ToInt32(contenido[6]);
+                assists[i] = Convert.ToInt32(contenido[7]);
+            }
+
+            winnerTeam = setWinnerTeam();                           // 3. Asignamos valor al equipo ganador
+        }
+
+
+        /*
+         *  2. DEFINIR EQUIPO GANADOR
+         */
+        public string setWinnerTeam()
+        {
+            string[] equipos = teamNames.Distinct().ToArray();      // Crear array con nombres equipos unicos
+            int[] puntuacionEquipos = new int[equipos.Length];
+
+            for (int i = 1; i < teamNames.Length; i++)              // Sumamos los puntos a cada equipo correspondiente
+            {
+                puntuacionEquipos[Array.IndexOf(equipos, teamNames[i])] += scoredPoints[i];
+            }
+
+            return equipos[Array.IndexOf(puntuacionEquipos, puntuacionEquipos.Max())];  // Devolvemos resultado
+        }
+
+
+        /*
+         *  3. AÑADIR PUNTUACIONES
+         */
         public void addScoredPoints(ref Puntuaciones puntuaciones)
         {
             for (int i = 1; i < nicknames.Length; i++)
@@ -48,47 +100,6 @@ namespace CalculateMVP
             }
 
             return ratingPoints;
-        }
-
-        public string setWinnerTeam()
-        {
-            string[] equipos = teamNames.Distinct().ToArray();      // Crear array con nombres equipos unicos
-            int[] puntuacionEquipos = new int[equipos.Length];
-
-            for (int i = 1; i < teamNames.Length; i++)              // Sumamos los puntos a cada equipo correspondiente
-            {
-                puntuacionEquipos[Array.IndexOf(equipos, teamNames[i])] += scoredPoints[i];
-            }
-
-            return equipos[Array.IndexOf(puntuacionEquipos, puntuacionEquipos.Max())];  // Devolvemos resultado
-        }
-
-        public BasketGame(string[] partido) 
-        {
-            players = new string[partido.Length];               // Establecemos tamaño de los arrays
-            nicknames = new string[partido.Length];
-            numbers = new int[partido.Length];
-            teamNames = new string[partido.Length];
-            positions = new char[partido.Length];
-            scoredPoints = new int[partido.Length];
-            rebounds = new int[partido.Length];
-            assists = new int[partido.Length];
-
-            for (int i = 1; i < partido.Length; i++)            // Iteramos sobre cada linea del archivo
-            {
-                string[] contenido = partido[i].Split(';');
-
-                players[i] = contenido[0];                      // El primer valor [0] de cada array queda sin inicializar
-                nicknames[i] = contenido[1]; 
-                numbers[i] = Convert.ToInt32(contenido[2]); 
-                teamNames[i] = contenido[3]; 
-                positions[i] = Convert.ToChar(contenido[4]);
-                scoredPoints[i] = Convert.ToInt32(contenido[5]);
-                rebounds[i] = Convert.ToInt32(contenido[6]);
-                assists[i] = Convert.ToInt32(contenido[7]);
-            }
-
-            winnerTeam = setWinnerTeam();                   // Asignamos valor al equipo ganador
         }
     }    
 }

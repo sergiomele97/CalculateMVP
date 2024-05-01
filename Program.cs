@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+
 
 namespace CalculateMVP
 {
     internal class Program
     {
-        public static Puntuaciones puntuaciones = new Puntuaciones();  // Creamos una instancia para guardar las puntuaciones
+        public static Puntuaciones puntuaciones = new Puntuaciones();                           // Creamos una instancia para guardar las puntuaciones
 
         static void Main(string[] args)
         {
@@ -19,14 +15,14 @@ namespace CalculateMVP
             string[] archivos = {}; 
             
 
-            while (IsDirectoryOK(directorio = SolicitarDirectorio(), ref archivos) != true)   // 1. Bucle hasta obtener un directorio adecuado
+            while (IsDirectoryOK(directorio = SolicitarDirectorio(), ref archivos) != true)     // 1. Bucle hasta obtener un directorio adecuado
             {
                 Console.WriteLine("El directorio introducido no cumple con las condiciones");   
             }
 
-            GameDataProcessing(archivos);       // 2. Procesa los archivos y almacena la información en la instancia puntuaciones (Nicks + ratingPoints)                        
+            GameDataProcessing(archivos);                                                       // 2. Procesa los archivos y almacena la información en la instancia puntuaciones (Nicks + ratingPoints)                        
 
-            Console.WriteLine(FindMVP(directorio, archivos));         // 3. Mostramos por pantalla los resultados de calcular el MVP para ese directorio
+            Console.WriteLine(FindMVP(directorio, archivos));                                   // 3. Mostramos por pantalla los resultados de calcular el MVP para ese directorio
         
         }   // FIN DEL PROGRAMA
 
@@ -84,8 +80,8 @@ namespace CalculateMVP
                 if (IsGameProcessingOK(archivo) != true)
                 {
                     Console.WriteLine("Detectado archivo con formato invalido: " + archivo +
-                                              "\nNo se puede calcular el MVP si un archivo esta comprometido.\n" +
-                                              "El programa se cerrará.");
+                                      "\nNo se puede calcular el MVP si un archivo esta comprometido.\n" +
+                                      "El programa se cerrará.");
                     Console.ReadKey();
                     System.Environment.Exit(0);     // Si un archivo es NOK --> Finaliza el programa
                 };
@@ -136,7 +132,7 @@ namespace CalculateMVP
             int indexMVP = 0;
             for (int i = 0; i < puntuaciones.nicks.Count(); i++)
             {
-                // DEBUG: Console.WriteLine("El jugador es: " + puntuaciones.nicks[i] + ", con una puntuacion de " + puntuaciones.ratingPoints[i] + "."); 
+                Console.WriteLine("El jugador es: " + puntuaciones.nicks[i] + ", con una puntuacion de " + puntuaciones.ratingPoints[i] + "."); 
                 if (puntuaciones.ratingPoints[i] > puntuaciones.ratingPoints[indexMVP])
                 {
                     indexMVP = i;
